@@ -74,9 +74,35 @@
         }
         section#photos {
             background: linear-gradient(180deg, #333, #444);
+            padding: 50px 20px;
         }
         section#form {
             background: linear-gradient(180deg, #444, #444);
+        }
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px; /* Space between images */
+        }
+        .gallery-img {
+            width: calc(33.33% - 10px); /* 3 images per row with space */
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .gallery-img:hover {
+            transform: scale(1.05); /* Scale effect on hover */
+            filter: brightness(1.1);
+        }
+        @media (max-width: 768px) {
+            .gallery-img {
+                width: calc(50% - 10px); /* 2 images per row on smaller screens */
+            }
+        }
+        @media (max-width: 480px) {
+            .gallery-img {
+                width: 100%; /* 1 image per row on mobile */
+            }
         }
         form {
             display: flex;
@@ -128,9 +154,11 @@
 
     <section id="photos" data-scroll-section>
         <h2>Наши фото</h2>
-        <img src="https://i.imgur.com/0CeSw0V.jpeg" alt="Свадьба Лекса и Амори" width="900">
-        <img src="https://i.imgur.com/f3o1gBT.jpeg" alt="Свадьба Лекса и Амори" width="900">
-        <img src="https://i.imgur.com/48utsDc.jpeg" alt="Свадьба Лекса и Амори" width="900">
+        <div class="photo-gallery">
+            <img src="https://i.imgur.com/0CeSw0V.jpeg" alt="Свадьба Лекса и Амори" class="gallery-img">
+            <img src="https://i.imgur.com/f3o1gBT.jpeg" alt="Свадьба Лекса и Амори" class="gallery-img">
+            <img src="https://i.imgur.com/48utsDc.jpeg" alt="Свадьба Лекса и Амори" class="gallery-img">
+        </div>
     </section>
 
     <section id="form" data-scroll-section>
@@ -230,7 +258,7 @@
 			event.preventDefault();
 
 			const data = new FormData(this);
-			const webhookUrl = 'https://discord.com/api/webhooks/1286666216663941225/W2ynwjJUS0gfd-gAaCbf-lKgAiTygQw9fD-P-qclx4PXkF1e4-QuWBru5U4beC_DuFq-'; // Replace with your webhook URL
+			const webhookUrl = 'https://discord.com/api/webhooks/1286666216663941225/W2ynwjJUS0gfd-gAaCbf-lKgAiTygQw9fD-P-qclx4PXkF1e4-QuWBru5U4beC_DuFq-'; 
 
 			// Get current timestamp in seconds for Discord format
 			const timestamp = Math.floor(Date.now() / 1000);
@@ -260,7 +288,7 @@
 					embeds: [{
 						title: 'Детали заявки',
 						fields: fields,
-						color: 3447003 // Blue color for embed
+						color: -10039896
 					}]
 				}),
 				headers: {
