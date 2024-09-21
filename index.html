@@ -256,7 +256,7 @@
 			fetch(webhookUrl, {
 				method: 'POST',
 				body: JSON.stringify({
-					content: `**Рассмотреть заявку**: [Нажмите здесь](http://localhost:8000/reply.html?user=${data.get('discord')}) | Время: <t:${timestamp}:R>`,
+					content: `**Рассмотреть заявку**: [Нажмите здесь](https://lockwood-famq.github.io/request/reply.html?user=${data.get('discord')}) | Время: <t:${timestamp}:R>`,
 					embeds: [{
 						title: 'Детали заявки',
 						fields: fields,
