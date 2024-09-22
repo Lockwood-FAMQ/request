@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация на событие</title>
+    <title>Мероприятия и Регистрация</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -13,7 +13,6 @@
             color: #fff;
             text-align: center;
             overflow-x: hidden;
-            user-select: none;
         }
 
         h1, h2 {
@@ -76,6 +75,19 @@
             align-items: center;
         }
 
+        .event-section {
+            margin: 50px 0;
+        }
+
+        .event-section h2 {
+            font-size: 2.5rem;
+        }
+
+        .event-section p {
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+
         form {
             display: flex;
             flex-direction: column;
@@ -110,17 +122,13 @@
             background-color: #888;
         }
 
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-
         .circle {
             position: absolute;
             border-radius: 50%;
             background-color: rgba(255, 255, 255, 0.3);
             animation: move 10s linear infinite;
             opacity: 0.5;
-            z-index: -1; /* Keep circles in the background */
+            z-index: -1;
         }
 
         @keyframes move {
@@ -151,45 +159,91 @@
 </head>
 <body>
 
-    <nav id="navbar" aria-label="Основное навигационное меню">
+    <!-- Navigation bar with links to different sections -->
+    <nav id="navbar">
         <ul>
-            <li><a href="#form" data-scroll>Регистрация на событие</a></li>
+            <li><a href="#registration">Регистрация</a></li>
+            <li><a href="#hide-and-seek">Прятки</a></li>
+            <li><a href="#among-us">Among Us</a></li>
         </ul>
     </nav>
 
-    <main data-scroll-container>
-        <section id="form" data-scroll-section>
-            <h2>Регистрация на событие</h2>
-            <form id="eventRegistrationForm" aria-labelledby="form">
-                <label for="name">Ваши Имя, Фамилия:</label>
-                <input type="text" id="name" name="name" required minlength="3" maxlength="50" placeholder="Введите полное имя">
+    <!-- Registration Section -->
+    <section id="registration" class="event-section">
+        <h2>Регистрация на мероприятие</h2>
+        <form id="eventRegistrationForm">
+            <label for="name">Ваши Имя, Фамилия:</label>
+            <input type="text" id="name" name="name" required minlength="3" maxlength="50" placeholder="Введите полное имя">
 
-                <label for="staticID">Ваш StaticID:</label>
-                <input type="text" id="staticID" name="staticID" required pattern="^[0-9]+$" placeholder="Введите только цифры">
+            <label for="staticID">Ваш StaticID:</label>
+            <input type="text" id="staticID" name="staticID" required pattern="^[0-9]+$" placeholder="Введите только цифры">
 
-                <label for="event">Какое событие?</label>
-                <select id="event" name="event" required>
-                    <option value="" disabled selected>Выберите событие</option>
-                    <option value="Семейное собрание">Семейное собрание</option>
-                    <option value="Тренировка команды">Тренировка команды</option>
-                    <option value="Специальная встреча">Специальная встреча</option>
-                </select>
+            <label for="event">Какое событие?</label>
+            <select id="event" name="event" required>
+                <option value="" disabled selected>Выберите событие</option>
+                <option value="Among US">Among Us</option>
+                <option value="Прятки">Прятки</option>
+            </select>
 
-                <label>Готовы ли вы присоединиться к нашей семье?</label>
-                <label><input type="radio" name="joinFamily" value="Да" required>Да</label>
-                <label><input type="radio" name="joinFamily" value="Нет" required>Нет</label>
+            <label>Готовы ли вы присоединиться к нашей семье?</label>
+            <label><input type="radio" name="joinFamily" value="Да" required>Да</label>
+            <label><input type="radio" name="joinFamily" value="Нет" required>Нет</label>
 
-                <input type="submit" value="Отправить заявку">
-            </form>
-        </section>
-    </main>
+            <input type="submit" value="Отправить заявку">
+        </form>
+    </section>
 
+    <!-- Hide and Seek Event Section -->
+    <section id="hide-and-seek" class="event-section">
+        <h2>Мероприятие "Прятки"</h2>
+        <p><strong>Приз:</strong> 50.000$</p>
+        <p><strong>Место проведения:</strong> В пределах указанного корабля</p>
+        <p>В этом мероприятии вы будете участвовать в игре в прятки, где каждый игрок будет стараться найти идеальное место для укрытия, а другой игрок будет пытаться найти и поймать всех спрятавшихся.</p>
+        <h3>IC Правила:</h3>
+        <ul>
+            <li>Прятаться можно только в пределах данного корабля.</li>
+            <li>Если вас нашли, вы должны пройти с поднятыми руками в джакузи.</li>
+            <li>Запрещено не прятаться или не искать.</li>
+        </ul>
+        <h3>OOC Правила:</h3>
+        <ul>
+            <li>Можно использовать анимации.</li>
+            <li>Запрещено использовать баги (включая баг анимаций).</li>
+        </ul>
+    </section>
+
+    <!-- Among Us Event Section -->
+    <section id="among-us" class="event-section">
+        <h2>Мероприятие "Among Us"</h2>
+        <p><strong>Приз:</strong> 50.000$</p>
+        <p>Один игрок в начале матча получает роль предателя, который должен любым способом устранить всех остальных игроков, при этом сам не попадая под подозрения. Игрокам нужно выполнять задания и сообщать детективу, если они подозревают кого-то.</p>
+        <h3>IC Правила:</h3>
+        <ul>
+            <li>Собрание можно проводить только в случае нахождения трупа.</li>
+            <li>Запрещено сообщать, кто убил или кто самозванец, если вас убили.</li>
+            <li>Запрещено не выполнять задачи или не участвовать в саботаже.</li>
+            <li>Запрещено убивать слишком часто или всех сразу.</li>
+        </ul>
+        <h3>OOC Правила:</h3>
+        <ul>
+            <li>Если игрок убит, он должен лечь.</li>
+            <li>Запрещено общаться вне обсуждений для передачи информации.</li>
+            <li>Для сбора нужно кричать: /s Общий сбор!</li>
+            <li>Достаточно одного удара, чтобы игрок умер.</li>
+        </ul>
+        <h3>Задания:</h3>
+        <ul>
+            <li>1 этаж: Сыграть на скрипке в музыкальном классе.</li>
+            <li>2 этаж: Взять вещи из кабинки и постирать в стиральной машине.</li>
+            <li>3 этаж: Сделать опыт по химии.</li>
+        </ul>
+    </section>
+
+    <!-- Background Circles -->
     <div class="circle" style="width: 50px; height: 50px; top: 20%; left: 10%; animation-duration: 15s;"></div>
     <div class="circle" style="width: 70px; height: 70px; top: 60%; left: 70%; animation-duration: 25s;"></div>
-    <div class="circle" style="width: 40px; height: 40px; top: 80%; left: 30%; animation-duration: 20s;"></div>
-    <div class="circle" style="width: 60px; height: 60px; top: 40%; left: 50%; animation-duration: 30s;"></div>
-    <div class="circle" style="width: 80px; height: 80px; top: 10%; left: 20%; animation-duration: 18s;"></div>
-    <div class="circle" style="width: 30px; height: 30px; top: 70%; left: 80%; animation-duration: 22s;"></div>
+    <div class="circle" style="width: 40px; height: 40px; top: 80%; left: 20%; animation-duration: 10s;"></div>
+    <div class="circle" style="width: 90px; height: 90px; top: 10%; left: 50%; animation-duration: 35s;"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.0/dist/locomotive-scroll.min.js"></script>
     <script>
