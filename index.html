@@ -78,7 +78,7 @@
         }
         section#form {
             background: linear-gradient(180deg, #444, #444);
-            padding-bottom: 50px; /* Add padding at the bottom */
+            padding-bottom: 50px;
         }
         .photo-gallery {
             display: flex;
@@ -87,16 +87,15 @@
             gap: 15px;
         }
         .gallery-img {
-			width: calc(33.33% - 10px);
-			border-radius: 10px; /* Rounded corners for images */
-			transition: transform 0.3s, filter 0.3s; /* Hover effects */
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add shadow */
-		}
-		.gallery-img:hover {
-			transform: scale(1.05); /* Scale up on hover */
-			filter: brightness(1.1); /* Brightness increase on hover */
-		}
-
+            width: calc(33.33% - 10px);
+            border-radius: 10px;
+            transition: transform 0.3s, filter 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .gallery-img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
         @media (max-width: 768px) {
             .gallery-img {
                 width: calc(50% - 10px);
@@ -112,9 +111,9 @@
             flex-direction: column;
             width: 400px;
             margin-top: 20px;
-            background-color: rgba(85, 85, 85, 0.8); /* Semi-transparent background */
-            padding: 20px; /* Padding inside form */
-            border-radius: 20px; /* Rounded corners for the form */
+            background-color: rgba(85, 85, 85, 0.8);
+            padding: 20px;
+            border-radius: 20px;
         }
         label, input, textarea {
             margin-bottom: 10px;
@@ -128,13 +127,13 @@
             color: #fff;
             outline: none;
             font-size: 1.25rem;
-            border-radius: 10px; /* Rounded corners for input and textarea */
+            border-radius: 10px;
         }
         input[type="submit"] {
             cursor: pointer;
             background-color: #666;
             transition: background-color 0.3s;
-            border-radius: 10px; /* Rounded corners for submit button */
+            border-radius: 10px;
         }
         input[type="submit"]:hover {
             background-color: #888;
@@ -149,6 +148,40 @@
             color: #fff;
             text-align: left;
             max-width: 600px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #333;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal h2 {
+            margin: 0 0 10px;
+        }
+        .close {
+            cursor: pointer;
+            float: right;
+            font-size: 1.5rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -236,6 +269,15 @@
         </form>
     </section>
 
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
     <script>
         // Initialize Locomotive Scroll
         const scroll = new LocomotiveScroll({
@@ -277,17 +319,37 @@
             observer.observe(section);
         });
 
+        // Submission limit
+        const lastSubmission = localStorage.getItem('lastSubmission');
+        const oneWeek = 7 * 24 * 60 * 60 * 1000; // One week in milliseconds
+
+        // Modal display function
+        function showModal(title, message) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // Close modal event
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+        });
+
         // Form submission with Discord Webhook
         document.getElementById('applicationForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const data = new FormData(this);
-            const webhookUrl = 'https://discord.com/api/webhooks/1286666216663941225/W2ynwjJUS0gfd-gAaCbf-lKgAiTygQw9fD-P-qclx4PXkF1e4-QuWBru5U4beC_DuFq-'; 
+            // Check if the user has submitted in the last week
+            if (lastSubmission && (Date.now() - lastSubmission < oneWeek)) {
+                showModal('Ошибка', 'Вы можете отправить заявку только раз в 7 дней.');
+                return;
+            }
 
-            // Get current timestamp in seconds for Discord format
+            const data = new FormData(this);
+            const webhookUrl = 'https://ptb.discord.com/api/webhooks/1287718428056096789/i81UHi3r2QPZ0-gQuRuQ9PENLQ3pdg4a6oc0mL3S-Ok6d7DjgfK8nLscgR17fT3E4qAA'; 
+
             const timestamp = Math.floor(Date.now() / 1000);
 
-            // Prepare structured embed message
             const fields = [
                 { name: '**Имя, Фамилия:**', value: data.get('name'), inline: true },
                 { name: '**StaticID:**', value: data.get('staticID'), inline: true },
@@ -320,14 +382,15 @@
                 }
             }).then(response => {
                 if (response.ok) {
-                    alert('Заявка отправлена успешно!');
+                    localStorage.setItem('lastSubmission', Date.now());
+                    showModal('Успех', 'Заявка отправлена успешно!');
                     this.reset();
                 } else {
-                    alert('Произошла ошибка при отправке заявки.');
+                    showModal('Ошибка', 'Произошла ошибка при отправке заявки.');
                 }
             }).catch(error => {
                 console.error('Error:', error);
-                alert('Произошла ошибка при отправке заявки.');
+                showModal('Ошибка', 'Произошла ошибка при отправке заявки.');
             });
         });
     </script>
